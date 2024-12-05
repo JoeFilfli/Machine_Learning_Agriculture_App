@@ -1,0 +1,80 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Tiles Visualization</title>
+    <style>
+        .tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 1px;
+        }
+        .tiles-grid img {
+            width: 100%;
+            height: auto;
+        }
+        .combined-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .section-title {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .images-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .image-wrapper {
+            flex: 1;
+            min-width: 300px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Tiles Visualization</h1>
+
+    <div class="images-container">
+        {% if combined_image %}
+        <div class="image-wrapper">
+            <h2 class="section-title">Combined Original Image</h2>
+            <img src="{{ url_for('output_images', filename=combined_image) }}" alt="Combined Image" class="combined-image">
+        </div>
+        {% endif %}
+
+        {% if combined_processed_image %}
+        <div class="image-wrapper">
+            <h2 class="section-title">Combined Processed Image</h2>
+            <img src="{{ url_for('output_images', filename=combined_processed_image) }}" alt="Combined Processed Image" class="combined-image">
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2 class="section-title">Original Tiles</h2>
+        <div class="tiles-grid">
+            {% for tile in tile_images %}
+            <img src="{{ url_for('output_images', filename=tile) }}" alt="{{ tile }}">
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <h2 class="section-title">Processed Tiles</h2>
+        <div class="tiles-grid">
+            {% for tile in processed_tile_images %}
+            <img src="{{ url_for('processed_tiles', filename=tile) }}" alt="{{ tile }}">
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

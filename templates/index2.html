@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plant Disease Predictor with Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        /* Flash Messages */
+        .flash {
+            background-color: #ffe6e6;
+            border-left: 6px solid #ff4d4d;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            color: #a94442;
+        }
+
+        /* Upload Form */
+        .upload-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .upload-section input[type=file] {
+            display: none;
+        }
+        .upload-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .upload-label:hover {
+            background-color: #45a049;
+        }
+        .upload-section input[type=submit] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .upload-section input[type=submit]:hover {
+            background-color: #1f6391;
+        }
+
+        /* Prediction Result */
+        .result {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .result h2 {
+            color: #27ae60;
+        }
+        .result p {
+            font-size: 1.1em;
+            color: #34495e;
+        }
+        .result img {
+            margin-top: 15px;
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Chatbot Interface */
+        .chat-section {
+            margin-top: 40px;
+        }
+        .chat-section h3 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chatbot-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            height: 450px;
+            overflow-y: auto;
+            background-color: #fdfdfd;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .chat-message {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-end;
+        }
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+        .chat-message.bot {
+            justify-content: flex-start;
+        }
+        .message-content {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            position: relative;
+            font-size: 0.95em;
+        }
+        .chat-message.user .message-content {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border-bottom-right-radius: 0;
+        }
+        .chat-message.bot .message-content {
+            background-color: #e2e3e5;
+            color: #41464b;
+            border-bottom-left-radius: 0;
+        }
+        .chat-input {
+            display: flex;
+            margin-top: 15px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .chat-input input:focus {
+            border-color: #8e44ad;
+        }
+        .chat-input button {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .chat-input button:hover {
+            background-color: #732d91;
+        }
+
+        /* Avatars */
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-message.user .avatar {
+            order: 2;
+            margin-left: 10px;
+            margin-right: 0;
+        }
+        .chat-message.bot .avatar {
+            order: 1;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plant Disease Predictor with Chatbot</h1>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        
+        <!-- Upload Form -->
+        <div class="upload-section">
+            <form method="post" enctype="multipart/form-data">
+                <label class="upload-label" for="file">Choose Plant Image</label>
+                <input type="file" id="file" name="file" accept="image/*" required>
+                <br>
+                <input type="submit" value="Upload and Predict">
+            </form>
+        </div>
+        
+        <!-- Prediction Result -->
+        {% if prediction %}
+        <div class="result">
+            <h2>Prediction: {{ prediction }}</h2>
+            <p>Confidence: {{ confidence }}%</p>
+            <img src="{{ url_for('display_image', filename=filename) }}" alt="Uploaded Image">
+        </div>
+        {% endif %}
+        
+        <!-- Chatbot Interface -->
+        {% if prediction %}
+        <div class="chat-section">
+            <h3>Chat with PlantBot</h3>
+            <div class="chatbot-container" id="chatbot">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Type your message here..." autocomplete="off">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        // Initialize chatbot with a welcome message
+        {% if prediction %}
+        document.addEventListener("DOMContentLoaded", function() {
+            appendBotMessage("Hello! I'm PlantBot 🌿. How can I assist you regarding your plant's condition?");
+        });
+        {% endif %}
+        
+        // Function to append user message
+        function appendUserMessage(message) {
+            const chatbot = document.getElementById('chatbot');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message user';
+            
+            const avatar = document.createElement('img');
+            avatar.src = "{{ url_for('static', filename='images/user_avatar.jpeg') }}"; // User avatar URL
+            avatar.className = 'avatar';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerText = message;
+            
+            messageDiv.appendChild(content);
+            messageDiv.appendChild(avatar);
+            chatbot.appendChild(messageDiv);
+            chatbot.scrollTop = chatbot.scrollHeight;
+        }
+        
+            // Function to append bot message
+        function appendBotMessage(message) {
+            const chatbot = document.getElementById('chatbot');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message bot';
+            
+            const avatar = document.createElement('img');
+            avatar.src = "{{ url_for('static', filename='images/bot_avatar.png') }}"; // Bot avatar URL
+            avatar.className = 'avatar';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = message;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            chatbot.appendChild(messageDiv);
+            chatbot.scrollTop = chatbot.scrollHeight;
+        }
+
+        
+        // Function to send message
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (message === "") return;
+            
+            appendUserMessage(message);
+            input.value = "";
+            
+            // Get the predicted disease from the page
+            const prediction = "{{ prediction }}";
+            
+            // Send the message to the server
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        disease: prediction
+                    }),
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    appendBotMessage(data.reply);
+                } else {
+                    appendBotMessage("Sorry, I couldn't process your request.");
+                }
+            } catch (error) {
+                appendBotMessage("An error occurred. Please try again later.");
+                console.error('Error:', error);
+            }
+        }
+        
+        // Allow pressing Enter to send message
+        document.getElementById('chat-input')?.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
