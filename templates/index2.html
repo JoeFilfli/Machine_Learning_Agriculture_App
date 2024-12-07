@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +15,7 @@
             padding: 0;
         }
         .container {
-            max-width: 900px;
-            margin: 50px auto;
+            max-width: 90%;
             padding: 20px;
             background-color: #ffffff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -109,7 +110,6 @@
         .chat-message {
             display: flex;
             margin-bottom: 15px;
-            align-items: flex-end;
         }
         .chat-message.user {
             justify-content: flex-end;
@@ -118,9 +118,8 @@
             justify-content: flex-start;
         }
         .message-content {
-            max-width: 70%;
+            max-width: 100%;
             padding: 10px 15px;
-            border-radius: 20px;
             position: relative;
             font-size: 0.95em;
         }
@@ -134,36 +133,56 @@
             color: #41464b;
             border-bottom-left-radius: 0;
         }
+
+            /* Adjusting the chat input area */
+
         .chat-input {
             display: flex;
+            justify-content: center;
             margin-top: 15px;
+            width: 100%;
+            max-width: 1800px; 
+            margin-left: auto;
+            margin-right: auto;
         }
+
+
+
         .chat-input input {
-            flex: 1;
-            padding: 12px 20px;
+            width: 100%; 
+            max-width: 1800px; 
             border: 1px solid #ccc;
             border-radius: 20px;
             font-size: 1em;
             outline: none;
             transition: border-color 0.3s;
+            margin-right: 10px; 
+            padding: 10px 15px;
+            box-sizing: border-box;
         }
-        .chat-input input:focus {
-            border-color: #8e44ad;
-        }
-        .chat-input button {
-            margin-left: 10px;
-            padding: 12px 20px;
-            background-color: #8e44ad;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-        }
-        .chat-input button:hover {
-            background-color: #732d91;
-        }
+
+
+
+    .chat-input input:focus {
+        border-color: #8e44ad; 
+    }
+
+    .chat-input button {
+        padding: 10px 25px; 
+        background-color: #8e44ad;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+
+    .chat-input button:hover {
+        background-color: #732d91; 
+    }
 
         /* Avatars */
         .avatar {
@@ -260,7 +279,7 @@
             chatbot.scrollTop = chatbot.scrollHeight;
         }
         
-            // Function to append bot message
+        // Function to append bot message
         function appendBotMessage(message) {
             const chatbot = document.getElementById('chatbot');
             const messageDiv = document.createElement('div');
@@ -280,7 +299,6 @@
             chatbot.scrollTop = chatbot.scrollHeight;
         }
 
-        
         // Function to send message
         async function sendMessage() {
             const input = document.getElementById('chat-input');
@@ -328,3 +346,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

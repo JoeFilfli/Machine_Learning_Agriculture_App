@@ -1,80 +1,48 @@
-<!-- templates/index.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h1>Generate Zoomed-Out Tiles</h1>
+<p>Enter latitude, longitude, zoom level, and the number of tiles to generate. The application will fetch the imagery, process it, and display both the original and processed tiles below.</p>
+<form method="POST" action="/tiles">
+    <label>Latitude:</label><br>
+    <input type="text" name="latitude" required value="33.6131"><br>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Image Tiles Visualization</title>
-    <style>
-        .tiles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-            gap: 1px;
-        }
-        .tiles-grid img {
-            width: 100%;
-            height: auto;
-        }
-        .combined-image {
-            max-width: 100%;
-            height: auto;
-        }
-        .section-title {
-            margin-top: 20px;
-            font-size: 24px;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .images-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .image-wrapper {
-            flex: 1;
-            min-width: 300px;
-        }
-        h1, h2 {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <h1>Image Tiles Visualization</h1>
+    <label>Longitude:</label><br>
+    <input type="text" name="longitude" required value="35.7214"><br>
 
-    <div class="images-container">
-        {% if combined_image %}
-        <div class="image-wrapper">
-            <h2 class="section-title">Combined Original Image</h2>
-            <img src="{{ url_for('output_images', filename=combined_image) }}" alt="Combined Image" class="combined-image">
-        </div>
-        {% endif %}
+    <label>Zoom Out (e.g., 4000):</label><br>
+    <input type="number" name="zoom_out" value="4000" required><br>
 
-        {% if combined_processed_image %}
-        <div class="image-wrapper">
-            <h2 class="section-title">Combined Processed Image</h2>
-            <img src="{{ url_for('output_images', filename=combined_processed_image) }}" alt="Combined Processed Image" class="combined-image">
-        </div>
-        {% endif %}
-    </div>
+    <label>Number of Tiles (e.g., 168):</label><br>
+    <input type="number" name="num_tiles" value="168" required><br>
 
-    <div>
-        <h2 class="section-title">Original Tiles</h2>
-        <div class="tiles-grid">
-            {% for tile in tile_images %}
+    <input type="submit" value="Generate">
+</form>
+
+{% if combined_image %}
+    <h2>Combined Original Image</h2>
+    <img src="{{ url_for('output_images', filename=combined_image) }}" alt="Combined Original Image" style="max-width: 100%;">
+{% endif %}
+
+{% if combined_processed_image %}
+    <h2>Combined Processed Image</h2>
+    <img src="{{ url_for('output_images', filename=combined_processed_image) }}" alt="Combined Processed Image" style="max-width: 100%;">
+{% endif %}
+
+{% if tile_images %}
+    <h3>Original Tiles</h3>
+    <div class="images-group">
+        {% for tile in tile_images %}
             <img src="{{ url_for('output_images', filename=tile) }}" alt="{{ tile }}">
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
+{% endif %}
 
-    <div>
-        <h2 class="section-title">Processed Tiles</h2>
-        <div class="tiles-grid">
-            {% for tile in processed_tile_images %}
+{% if processed_tile_images %}
+    <h3>Processed Tiles</h3>
+    <div class="images-group">
+        {% for tile in processed_tile_images %}
             <img src="{{ url_for('processed_tiles', filename=tile) }}" alt="{{ tile }}">
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
-</body>
-</html>
+{% endif %}
+{% endblock %}
