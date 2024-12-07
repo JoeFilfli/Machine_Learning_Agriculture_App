@@ -1,7 +1,5 @@
 # Agriculture Assistance App
 
-![Agriculture Assistance App Banner](static/banner.png)
-
 ## Table of Contents
 
 - [Overview](#overview)
@@ -112,13 +110,13 @@ By integrating these features, the app aims to enhance agricultural productivity
 
         rsync is typically pre-installed. If not, install it using your package manager.
 
+        ```bash
+        sudo apt-get install rsync
+        ```
+
     - **For Windows:**
 
         Install [Cygwin](https://www.cygwin.com/) or use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) to access rsync.
-
-    ```bash
-    sudo apt-get install rsync
-    ```
 
 ## Configuration
 
@@ -144,37 +142,14 @@ The application requires certain environment variables to be set for proper func
 
     # Gemini API Configuration
     GEMINI_API_KEY=your_gemini_api_key_here
-
-    # Model Paths
-    PLANT_DISEASE_MODEL_PATH=Model_Training/final_model.keras
-    WATER_SEGMENTATION_MODEL_PATH=Model_Training/water_segmentation_unet.keras
     ```
 
     - **`SECRET_KEY`**: A secret key for Flask sessions. Replace `your_secret_key_here` with a strong, unique key.
     - **`GEMINI_API_KEY`**: Obtain your API key from [Gemini API](https://www.gemini.com/). Replace `your_gemini_api_key_here` with your actual API key.
-    - **`PLANT_DISEASE_MODEL_PATH`**: Path to the pre-trained plant disease detection model.
-    - **`WATER_SEGMENTATION_MODEL_PATH`**: Path to the pre-trained water segmentation U-Net model.
 
 ### Gemini API Integration
 
-The Farmer Chatbot leverages the Gemini API to provide intelligent responses. To integrate the Gemini API:
-
-1. **Obtain Gemini API Key**
-
-    - Sign up or log in to your [Gemini API](https://www.gemini.com/) account.
-    - Navigate to the API section and generate a new API key.
-
-2. **Set the API Key in `.env`**
-
-    ```env
-    GEMINI_API_KEY=your_gemini_api_key_here
-    ```
-
-    Replace `your_gemini_api_key_here` with the API key obtained from Gemini.
-
-3. **Usage in `app.py`**
-
-    Ensure that `app.py` reads the `GEMINI_API_KEY` from the environment variables and integrates it appropriately within the chatbot functionality.
+Ensure that the Gemini API key is correctly set in the `.env` file as shown above. This key is essential for enabling the chatbot functionality within the app.
 
 ## Running the App
 
@@ -236,13 +211,14 @@ The Farmer Chatbot leverages the Gemini API to provide intelligent responses. To
 
     From the homepage, select the "Water Segmentation" feature.
 
-2. **Upload Satellite Image**
+2. **Input Geographical Coordinates**
 
-    Upload a satellite image of the desired region.
+    - **Latitude and Longitude:** Enter the specific latitude and longitude coordinates of the area you wish to analyze.
+    - **Zoom Level:** Adjust the zoom level to obtain a broader or more detailed view of the satellite image.
 
 3. **Analyze Water Bodies**
 
-    The model will process the image and highlight water bodies, aiding in water resource management and planning, especially in desert areas.
+    The model will identify and segment water bodies, providing a visual map and relevant data for effective water resource management.
 
 ## Model Training
 
@@ -277,32 +253,42 @@ The repository includes pre-trained models for both plant disease detection and 
 
     After training, ensure that the models are saved to the designated paths and update the `.env` file accordingly.
 
-## Evaluation Metrics
+## Contribution
 
-### Intersection over Union (IoU)
+Contributions are welcome! Please follow these steps to contribute to the project:
 
-**Definition:**
+1. **Fork the Repository**
 
-Intersection over Union (IoU) is a metric used to evaluate the accuracy of image segmentation models. It measures the overlap between the predicted segmentation mask and the ground truth mask.
+2. **Create a New Branch**
 
-**Formula:**
+    ```bash
+    git checkout -b feature/YourFeatureName
+    ```
 
-\[
-\text{IoU} = \frac{\text{Area of Overlap}}{\text{Area of Union}} = \frac{|A \cap B|}{|A \cup B|}
-\]
+3. **Commit Your Changes**
 
-- **\( A \)**: Predicted segmentation mask.
-- **\( B \)**: Ground truth segmentation mask.
-- **\( |A \cap B| \)**: Number of pixels where both masks overlap.
-- **\( |A \cup B| \)**: Total number of pixels covered by either mask.
+    ```bash
+    git commit -m "Add your message here"
+    ```
 
-**Implementation in `image_processor.py`:**
+4. **Push to the Branch**
 
-```python
-def iou_coef(y_true, y_pred, smooth=1):
-    y_true_f = tf.reshape(y_true, [-1])
-    y_pred_f = tf.cast(tf.reshape(y_pred, [-1]), tf.float32)
-    intersection = tf.reduce_sum(y_true_f * y_pred_f)
-    union = tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) - intersection
-    iou = (intersection + smooth) / (union + smooth)
-    return iou
+    ```bash
+    git push origin feature/YourFeatureName
+    ```
+
+5. **Open a Pull Request**
+
+Please ensure your contributions adhere to the project's coding standards and include appropriate tests and documentation.
+
+## Contact
+
+For any inquiries or support, please contact:
+
+- **Name:** Joe Filfli
+- **Email:** joefilfli48@gmail.com
+- **GitHub:** [@JoeFilfli](https://github.com/JoeFilfli)
+
+---
+
+*Thank you for using the Agriculture Assistance App! We are committed to supporting farmers with cutting-edge technology to ensure sustainable and productive agricultural practices.*
