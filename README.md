@@ -16,6 +16,7 @@
   - [Environment Variables](#environment-variables)
   - [Gemini API Integration](#gemini-api-integration)
 - [Running the App](#running-the-app)
+  - [Run with Docker](#run-with-docker)
 - [Usage](#usage)
   - [Plant Disease Detection](#plant-disease-detection)
   - [Farmer Chatbot](#farmer-chatbot)
@@ -118,6 +119,66 @@ By integrating these features, the app aims to enhance agricultural productivity
 
         Install [Cygwin](https://www.cygwin.com/) or use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) to access rsync.
 
+---
+
+## Run with Docker
+
+You can also run the app in a Docker container for a consistent and isolated environment.
+
+### Prerequisites
+- Install Docker on your system.
+
+### Steps
+
+1. **Build the Docker Image**
+
+    ```bash
+    docker build -t agriculture-assistance-app .
+    ```
+
+2. **Run the Docker Container**
+
+    ```bash
+    docker run -p 5000:5000 --env-file .env agriculture-assistance-app
+    ```
+
+    - `-p 5000:5000`: Maps port 5000 in the container to port 5000 on your host machine.
+    - `--env-file .env`: Passes environment variables to the container.
+
+3. **Access the App**
+
+    Open your browser and navigate to:
+    ```plaintext
+    http://localhost:5000
+    ```
+
+---
+
+### Using Docker Compose (Optional)
+
+If you have a `docker-compose.yml` file, follow these steps:
+
+1. **Start the Services**
+
+    ```bash
+    docker-compose up
+    ```
+
+2. **Access the App**
+
+    Open your browser and navigate to:
+    ```plaintext
+    http://localhost:5000
+    ```
+
+3. **Stop the Services**
+
+    To stop the app, run:
+    ```bash
+    docker-compose down
+    ```
+
+---
 ## Configuration
 
 ### Environment Variables
