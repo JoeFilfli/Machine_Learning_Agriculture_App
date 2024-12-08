@@ -1,0 +1,13 @@
+gnore Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore environment files
+#.env
+*.env.un~
+
+# Ignore other unnecessary files
+.git
+*.gitignore.un~
+
