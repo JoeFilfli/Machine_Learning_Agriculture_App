@@ -120,6 +120,30 @@ By integrating these features, the app aims to enhance agricultural productivity
         Install [Cygwin](https://www.cygwin.com/) or use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) to access rsync.
 
 ---
+## Running the App
+
+1. **Activate the Virtual Environment**
+
+    ```bash
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
+
+2. **Run the Flask Application**
+
+    ```bash
+    python app.py
+    ```
+
+    Alternatively, if using Flask's CLI:
+
+    ```bash
+    flask run
+    ```
+
+3. **Access the App**
+
+    Open your web browser and navigate to `http://localhost:5000` to access the Agriculture Assistance App.
+
 
 ## Run with Docker
 
@@ -211,30 +235,6 @@ The application requires certain environment variables to be set for proper func
 ### Gemini API Integration
 
 Ensure that the Gemini API key is correctly set in the `.env` file as shown above. This key is essential for enabling the chatbot functionality within the app.
-
-## Running the App
-
-1. **Activate the Virtual Environment**
-
-    ```bash
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
-
-2. **Run the Flask Application**
-
-    ```bash
-    python app.py
-    ```
-
-    Alternatively, if using Flask's CLI:
-
-    ```bash
-    flask run
-    ```
-
-3. **Access the App**
-
-    Open your web browser and navigate to `http://localhost:5000` to access the Agriculture Assistance App.
 
 ## Usage
 
